@@ -2,6 +2,8 @@ import { env } from "cloudflare:workers";
 import { ZodError } from "zod";
 import { catalog, adminData, bucket, db, readSettings } from "../../../lib/store-repository";
 import { categoryInput, orderInput, productInput, settingsInput, slugify, transitions } from "../../../lib/store-domain";
+import { createSourcingRequest, deleteSourcingRequest, getSourcingImage, listSourcingRequests, SourcingError, trackSourcingRequest, updateSourcingRequest } from "../../../lib/concierge-service";
+import { ImageUploadError, inspectImage } from "../../../lib/image-upload";
 
 export const dynamic = "force-dynamic";
 type Ctx = { params: Promise<{path:string[]}> };
@@ -53,10 +55,13 @@ async function handle(request:Request,ctx:Ctx) {
     const settings=await readSettings();
     return json({code,totalCents:total,status:"pending",transferInstructions:input.paymentMethod==="transferencia"?settings.transferInstructions:null,whatsappUrl:`https://wa.me/${settings.whatsapp}?text=${encodeURIComponent(`Hola DG, realicé el pedido ${code}. Quiero coordinar la compra.`)}`},201);
   }
+  if (root==="sourcing" && action==="track" && request.method==="POST") return json(await trackSourcingRequest(await request.json()));
+  if (root==="sourcing" && path.length===1 && request.method==="POST") return json(await createSourcingRequest(request),201);
   if (root!=="admin") return fail("No encontrado",404);
   if (request.method==="GET") {
     if (!isAdmin(request)) return fail("Acceso restringido",403);
-    if (action==="dashboard") return json(await adminData());
+    if (action==="dashboard") return json({...await adminData(),sourcingRequests:await listSourcingRequests()});
+    if (action==="sourcing" && id && path[3]==="image") return getSourcingImage(id);
     if (action==="orders" && id) {
       const order=await db().prepare("SELECT * FROM orders WHERE id=?").bind(id).first();
       if (!order) return fail("Pedido no encontrado",404);
@@ -65,6 +70,8 @@ async function handle(request:Request,ctx:Ctx) {
     }
   }
   const denied=requireWrite(request); if (denied) return denied;
+  if (action==="sourcing" && id && request.method==="PUT") return json(await updateSourcingRequest(id,await request.json()));
+  if (action==="sourcing" && id && request.method==="DELETE") return json(await deleteSourcingRequest(id));
   if (action==="settings" && request.method==="PUT") {
     const value=settingsInput.parse(await request.json());
     await db().prepare("INSERT INTO settings(key,value) VALUES('store',?) ON CONFLICT(key) DO UPDATE SET value=excluded.value").bind(JSON.stringify(value)).run();
@@ -108,13 +115,8 @@ async function handle(request:Request,ctx:Ctx) {
   }
   if (action==="media" && request.method==="POST") {
     const type=request.headers.get("content-type")||"";
-    const ext=type==="image/jpeg"?"jpg":type==="image/png"?"png":type==="image/webp"?"webp":null;
-    if (!ext) return fail("Formato de imagen no permitido",415);
     const buffer=await request.arrayBuffer();
-    if (buffer.byteLength<20 || buffer.byteLength>5*1024*1024) return fail("La imagen debe pesar menos de 5 MB",413);
-    const bytes=new Uint8Array(buffer);
-    const valid=ext==="jpg"?bytes[0]===255&&bytes[1]===216:ext==="png"?bytes[0]===137&&bytes[1]===80&&bytes[2]===78&&bytes[3]===71:bytes.slice(0,4).every((b,i)=>b===[82,73,70,70][i])&&bytes.slice(8,12).every((b,i)=>b===[87,69,66,80][i]);
-    if (!valid) return fail("Archivo de imagen inválido",415);
+    const ext=inspectImage(type,buffer);
     const folder=new URL(request.url).searchParams.get("kind")==="category"?"categories":"products";
     const key=`${folder}/${crypto.randomUUID()}.${ext}`;
     await bucket().put(key,buffer,{httpMetadata:{contentType:type}});
@@ -123,6 +125,7 @@ async function handle(request:Request,ctx:Ctx) {
   return fail("No encontrado",404);
 }
 async function route(request:Request,ctx:Ctx) { try { return await handle(request,ctx); } catch (error) {
+  if (error instanceof SourcingError || error instanceof ImageUploadError) return fail(error.message,error.status);
   if (error instanceof ZodError) return fail(error.issues[0]?.message||"Datos inválidos");
   if (error instanceof SyntaxError) return fail("JSON inválido");
   if (error instanceof Error && error.message.includes("insufficient_stock")) return fail("Stock insuficiente para confirmar el pedido",409);

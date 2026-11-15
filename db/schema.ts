@@ -30,3 +30,22 @@ export const orderItems = sqliteTable("order_items", {
   quantity: integer("quantity").notNull(),
 });
 export const settings = sqliteTable("settings", { key: text("key").primaryKey(), value: text("value").notNull() });
+
+export const sourcingRequests = sqliteTable("sourcing_requests", {
+  id: text("id").primaryKey(),
+  code: text("code").notNull().unique(),
+  customerName: text("customer_name").notNull(),
+  customerEmail: text("customer_email").notNull(),
+  customerPhone: text("customer_phone").notNull(),
+  city: text("city").notNull(),
+  size: text("size").notNull().default(""),
+  description: text("description").notNull(),
+  budgetCents: integer("budget_cents"),
+  imageKey: text("image_key").notNull(),
+  status: text("status").notNull().default("new"),
+  itemPriceCents: integer("item_price_cents"),
+  deliveryCents: integer("delivery_cents"),
+  quoteNotes: text("quote_notes").notNull().default(""),
+  createdAt: text("created_at").notNull(),
+  updatedAt: text("updated_at").notNull(),
+});

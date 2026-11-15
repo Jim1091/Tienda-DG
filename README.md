@@ -1,5 +1,11 @@
 # DG Moda Estudio
 
+## Servicio «Buscamos por ti»
+
+En la portada, el cliente puede enviar una foto de referencia, talla, ciudad y datos de contacto. Recibe un código y puede seguir la solicitud con su correo. La foto se guarda en R2 y solo el panel privado puede verla. En **Administración → Buscamos por ti**, DG revisa la foto, busca opciones manualmente y registra por separado el precio de la prenda y del envío. La cotización aparece al cliente antes de que acepte la compra por WhatsApp. No hay búsqueda automática de proveedores ni cobro en línea.
+
+La migración `drizzle/0002_dusty_scalphunter.sql` crea la tabla de solicitudes. Para pruebas locales se ejecuta después de `0000` y `0001`. El sitio está configurado con acceso público; el panel sigue limitado a la identidad administradora. Revisa solicitudes nuevas desde el panel y contacta al cliente cuando publiques una cotización.
+
 Tienda de ropa adaptable a móvil, con catálogo administrable, pedidos por WhatsApp o transferencia y rastreo por código y correo. El catálogo se entrega vacío para que la administradora cargue los productos reales.
 
 Mientras el catálogo está vacío, la portada muestra fotografías ilustrativas en categorías y tarjetas de colección. Llevan etiquetas de ejemplo, no tienen precio ni botón de compra y no se guardan como productos. Desaparecen automáticamente de la colección cuando se publican productos reales. El panel permite subir una foto propia por categoría.
@@ -26,13 +32,14 @@ npm run db:generate # solo cuando cambie db/schema.ts
 npm run build
 node --import ./scripts/sites-env.mjs ./node_modules/wrangler/bin/wrangler.js d1 execute DB --local --config dist/server/wrangler.json --persist-to .wrangler/state --file drizzle/0000_sweet_leo.sql
 node --import ./scripts/sites-env.mjs ./node_modules/wrangler/bin/wrangler.js d1 execute DB --local --config dist/server/wrangler.json --persist-to .wrangler/state --file drizzle/0001_clever_titanium_man.sql
+node --import ./scripts/sites-env.mjs ./node_modules/wrangler/bin/wrangler.js d1 execute DB --local --config dist/server/wrangler.json --persist-to .wrangler/state --file drizzle/0002_dusty_scalphunter.sql
 node --import ./scripts/sites-env.mjs ./node_modules/wrangler/bin/wrangler.js dev --config dist/server/wrangler.json --local --persist-to .wrangler/state --ip 127.0.0.1 --var DG_ADMIN_EMAIL:seedy@sites.test
 ```
 
-La tienda local abre en `http://127.0.0.1:8787`. En otra terminal, `node scripts/smoke-store.mjs` comprueba autorización, catálogo, pedidos, rastreo, stock y fotos. El script crea datos **solo en la base local**. Para volver a compilar, detén el servidor de Wrangler primero.
+La tienda local abre en `http://127.0.0.1:8787`. En otra terminal, `node scripts/smoke-store.mjs` y `node scripts/smoke-sourcing.mjs` comprueba autorización, catálogo, pedidos, rastreo, stock y fotos. El script crea datos **solo en la base local**. Para volver a compilar, detén el servidor de Wrangler primero.
 
 ## Publicación y operación
 
-El manifiesto `.openai/hosting.json` conecta D1 y R2 al mismo Site. Sites aplica la migración antes de publicar el Worker. Mantén `DG_ADMIN_EMAIL` como secreto del entorno, no en Git. El sitio se mantiene privado durante la preparación; antes de abrirlo al público, carga productos reales, confirma los datos de transferencia, prueba en móvil y acuerda entregas, devoluciones y tratamiento de datos.
+El manifiesto `.openai/hosting.json` conecta D1 y R2 al mismo Site. Sites aplica la migración antes de publicar el Worker. Mantén `DG_ADMIN_EMAIL` como secreto del entorno, no en Git. El sitio ya es público. Antes de promocionarlo, carga productos reales, confirma los datos de transferencia, prueba en móvil y acuerda entregas, devoluciones y tratamiento de datos.
 
 La tienda permite cargar tallas y stock total por producto. Si DG necesita stock independiente por talla o integración con pasarela de pagos, esas funciones requieren una evolución del modelo y pruebas adicionales.
