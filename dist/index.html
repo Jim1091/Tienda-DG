@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f8f5ef">
+  <meta name="description" content="DG Moda: explora prendas, arma tu look y prueba una compra de demostración.">
+  <title>DG Moda | Viste como te sientes</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <div class="announcement"><span>✦ NUEVA COLECCIÓN DG</span><span>Una forma de vestir, mil formas de ser</span><span>✦ COMPRA DE DEMOSTRACIÓN</span></div>
+  <header class="site-header" id="inicio">
+    <div class="header-inner container">
+      <button class="icon-button mobile-menu" id="menu-toggle" aria-label="Abrir menú" aria-expanded="false">☰</button>
+      <a class="brand" href="#inicio" aria-label="DG Moda, inicio"><span>DG</span><small>MODA</small></a>
+      <nav class="main-nav" id="main-nav" aria-label="Navegación principal">
+        <a href="#inicio">Inicio</a><a href="#coleccion">Colección</a><a href="#ofertas">Ofertas</a><a href="#como-comprar">Cómo comprar</a><a href="#seguimiento">Rastrear pedido</a>
+      </nav>
+      <div class="header-actions">
+        <button class="icon-button" id="search-toggle" aria-label="Buscar productos" title="Buscar">⌕</button>
+        <button class="icon-button cart-trigger" id="cart-open" aria-label="Abrir carrito">♧<span id="cart-count">0</span></button>
+      </div>
+    </div>
+    <div class="search-bar container" id="search-bar" hidden><label for="header-search">Busca tu próximo look</label><input id="header-search" type="search" placeholder="Vestido, conjunto, blusa..."><button id="search-go" class="button button-dark">Buscar</button></div>
+  </header>
+
+  <main>
+    <section class="hero container" aria-labelledby="hero-title">
+      <div class="hero-copy"><div class="eyebrow"><span class="line"></span> DG / EDITORIAL 2026</div><h1 id="hero-title">Viste como <em>te sientes.</em></h1><p>Prendas para cada versión de ti. Explora, combina y encuentra ese look que habla por ti.</p><div class="hero-actions"><a class="button button-dark" href="#coleccion">Explorar colección <span>↗</span></a><a class="text-button" href="#como-comprar">Descubre cómo comprar <span>→</span></a></div><div class="hero-meta"><span><strong>01 / 04</strong> Estilo sin etiquetas</span><span>DESLIZA PARA DESCUBRIR ↓</span></div></div>
+      <div class="hero-image"><img src="images/editorial-3.jpg" alt="Look contemporáneo en tono blanco" fetchpriority="high"><div class="hero-image-tag"><span>DG EDIT</span><strong>Tu momento de brillar.</strong></div></div>
+    </section>
+
+    <section class="benefits"><div class="container benefit-grid"><div><span>✦</span><p>Estilo para cada ocasión</p></div><div><span>◇</span><p>Selecciona tu talla</p></div><div><span>↗</span><p>Consulta tu pedido</p></div><div><span>✉</span><p>Comparte por WhatsApp</p></div></div></section>
+
+    <section class="section container categories" id="categorias"><div class="section-heading"><div><span class="eyebrow">ENCUENTRA TU ESENCIA</span><h2>Compra por <em>categoría.</em></h2></div><a href="#coleccion" class="text-button">Ver todo <span>↗</span></a></div><div class="category-grid">
+      <button class="category-card" data-category="Vestidos"><img src="images/editorial-2.jpg" alt="Vestido rojo"><span>01</span><strong>Vestidos</strong><b>↗</b></button>
+      <button class="category-card" data-category="Conjuntos"><img src="images/look-1.jpg" alt="Conjunto amarillo"><span>02</span><strong>Conjuntos</strong><b>↗</b></button>
+      <button class="category-card" data-category="Blusas"><img src="images/editorial-1.jpg" alt="Blusa blanca"><span>03</span><strong>Blusas</strong><b>↗</b></button>
+      <button class="category-card" data-category="Abrigos"><img src="images/look-3.jpg" alt="Abrigo oscuro"><span>04</span><strong>Abrigos</strong><b>↗</b></button>
+    </div></section>
+
+    <section class="section catalog-section" id="coleccion"><div class="container"><div class="section-heading"><div><span class="eyebrow">PIEZAS PARA TI</span><h2>La colección <em>DG.</em></h2><p>Una selección de ejemplo para explorar la experiencia de compra.</p></div><div class="catalog-controls"><label for="sort-select">Ordenar por</label><select id="sort-select"><option value="featured">Destacados</option><option value="price-low">Precio: menor a mayor</option><option value="price-high">Precio: mayor a menor</option><option value="name">Nombre</option></select></div></div><div class="filters" role="group" aria-label="Filtrar productos"><button class="filter active" data-filter="Todos">Todos</button><button class="filter" data-filter="Vestidos">Vestidos</button><button class="filter" data-filter="Conjuntos">Conjuntos</button><button class="filter" data-filter="Blusas">Blusas</button><button class="filter" data-filter="Abrigos">Abrigos</button><button class="filter" data-filter="Accesorios">Accesorios</button><button class="filter" data-filter="Ofertas">Ofertas</button></div><div class="product-grid" id="product-grid"></div><p class="empty-products" id="empty-products" hidden>No encontramos prendas con ese filtro. Prueba otra búsqueda.</p></div></section>
+
+    <section class="editorial container" id="ofertas"><div class="editorial-photo"><img src="images/look-2.jpg" alt="Vestido azul claro"><span>DG / PARA CADA PLAN</span></div><div class="editorial-copy"><span class="eyebrow">UNA HISTORIA EN CADA LOOK</span><h2>La mejor versión de ti <em>no espera.</em></h2><p>Hay días para un vestido que se robe las miradas y otros para un conjunto cómodo que lo haga todo. Elige el tuyo.</p><a href="#coleccion" class="button button-light" id="offers-link">Descubrir ofertas <span>↗</span></a><div class="editorial-number">DG / 26</div></div></section>
+
+    <section class="section how-section container" id="como-comprar"><div class="section-heading"><div><span class="eyebrow">ASÍ DE SIMPLE</span><h2>Tu próximo look en <em>3 pasos.</em></h2></div></div><div class="steps"><div class="step"><span>01</span><h3>Explora</h3><p>Filtra por categoría y conoce los detalles de cada prenda.</p></div><div class="step"><span>02</span><h3>Elige</h3><p>Selecciona tu talla, agrega productos y revisa el carrito.</p></div><div class="step"><span>03</span><h3>Haz tu pedido</h3><p>Prueba el flujo de compra o comparte tu selección por WhatsApp.</p></div></div><p class="demo-note">Esta tienda es un proyecto académico. Los precios y pedidos son de demostración; no se realiza ningún cobro.</p></section>
+
+    <section class="track-section" id="seguimiento"><div class="container track-layout"><div><span class="eyebrow">SIEMPRE AL TANTO</span><h2>Rastrea tu <em>pedido.</em></h2><p>Ingresa tu número de pedido y el correo usado en la compra de demostración.</p><div class="track-decoration">DG<span>↗</span></div></div><div class="track-panel"><form id="track-form"><label for="track-number">Número de pedido</label><input id="track-number" required placeholder="Ej. DG-2026-123456" autocomplete="off"><label for="track-email">Correo electrónico</label><input id="track-email" type="email" required placeholder="tucorreo@ejemplo.com" autocomplete="email"><button class="button button-dark" type="submit">Consultar estado <span>→</span></button></form><div id="track-result" class="track-result" aria-live="polite"></div><p class="track-hint">Para probarlo ahora: <strong>DG-DEMO-001</strong> / <strong>demo@dg.com</strong></p></div></div></section>
+  </main>
+
+  <footer class="footer"><div class="container footer-grid"><div><a class="brand footer-brand" href="#inicio"><span>DG</span><small>MODA</small></a><p>Moda para expresarte todos los días.<br>Proyecto académico de tienda online.</p></div><div><h3>Explora</h3><a href="#coleccion">Colección</a><a href="#categorias">Categorías</a><a href="#ofertas">Ofertas</a></div><div><h3>Ayuda</h3><a href="#como-comprar">Cómo comprar</a><a href="#seguimiento">Rastrear pedido</a><button class="footer-link" id="footer-whatsapp">WhatsApp</button></div><div><h3>Hablemos</h3><p>¿Necesitas ayuda con tu look?</p><button class="button button-outline" id="contact-whatsapp">Abrir WhatsApp ↗</button></div></div><div class="container footer-bottom"><span>© 2026 DG Moda · Proyecto académico</span><span>Diseñado para inspirar tu estilo.</span></div></footer>
+
+  <button class="whatsapp-float" id="whatsapp-float" aria-label="Abrir WhatsApp"><span>◉</span> WhatsApp</button>
+  <div class="overlay" id="overlay" hidden></div>
+  <aside class="drawer" id="cart-drawer" role="dialog" aria-modal="true" aria-label="Tu carrito" hidden><div class="drawer-head"><div><span class="eyebrow">TU SELECCIÓN</span><h2>Mi carrito <span id="drawer-count">(0)</span></h2></div><button class="close-button" id="cart-close" aria-label="Cerrar carrito">×</button></div><div class="drawer-items" id="cart-items"></div><div class="drawer-footer"><div class="subtotal"><span>Subtotal</span><strong id="cart-total">$0.00</strong></div><p>Precio ilustrativo. Envío y pago no se procesan en esta demo.</p><button class="button button-dark full" id="checkout-open">Continuar pedido <span>→</span></button><button class="button button-outline full" id="cart-whatsapp">Compartir por WhatsApp</button></div></aside>
+  <div class="modal-wrap" id="product-modal" role="dialog" aria-modal="true" aria-label="Detalle de producto" hidden><div class="modal product-modal"><button class="close-button modal-close" data-close aria-label="Cerrar">×</button><div id="product-modal-body"></div></div></div>
+  <div class="modal-wrap" id="checkout-modal" role="dialog" aria-modal="true" aria-label="Finalizar pedido de demostración" hidden><div class="modal checkout-modal"><button class="close-button modal-close" data-close aria-label="Cerrar">×</button><span class="eyebrow">ÚLTIMO PASO</span><h2>Finaliza tu <em>pedido.</em></h2><p>Completa los datos para generar un pedido de ejemplo. No ingreses datos de tarjetas.</p><form id="checkout-form"><label for="customer-name">Nombre</label><input id="customer-name" required minlength="2" maxlength="80" placeholder="Tu nombre"><label for="customer-email">Correo electrónico</label><input id="customer-email" type="email" required placeholder="tucorreo@ejemplo.com"><label for="payment-method">Método de pago (simulación)</label><select id="payment-method" required><option value="">Selecciona una opción</option><option value="transferencia">Transferencia bancaria</option><option value="contraentrega">Pago contra entrega</option></select><div class="checkout-summary"><span>Total de ejemplo</span><strong id="checkout-total">$0.00</strong></div><button class="button button-dark full" type="submit">Crear pedido de demostración →</button></form></div></div>
+  <div class="modal-wrap" id="success-modal" role="dialog" aria-modal="true" aria-label="Pedido creado" hidden><div class="modal success-modal"><button class="close-button modal-close" data-close aria-label="Cerrar">×</button><span class="success-icon">✓</span><span class="eyebrow">PEDIDO DE DEMOSTRACIÓN</span><h2>¡Listo! Tu look te espera.</h2><p id="success-copy"></p><strong id="success-number"></strong><button class="button button-dark full" id="success-track">Rastrear este pedido →</button></div></div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
