@@ -1,6 +1,6 @@
 # DG Moda
 
-Adaptación académica de una tienda de ropa. El sitio de referencia es [Venova Moda](https://venovamoda.com/); se analizaron su navegación, catálogo, categorías, selección de talla, carrito, consulta de pedidos y acceso a WhatsApp. DG usa identidad gráfica, textos y datos de ejemplo propios.
+Adaptación académica de una tienda de ropa. El sitio de referencia es [Venova Moda](https://venovamoda.com/); se analizaron su buscador, menú de categorías, novedades, precios, secciones de descuentos y destacados, selección de talla, carrito, consulta de pedidos y acceso a WhatsApp. DG usa identidad gráfica, textos y datos de ejemplo propios.
 
 ## Probar localmente
 
@@ -18,6 +18,7 @@ Para probar el recorrido: abre un producto con `+`, elige una talla, agrégalo a
 
 - El catálogo, los precios y las fotos son ilustrativos. Las fotografías son de [Unsplash](https://unsplash.com/) y se guardaron localmente.
 - El carrito y los pedidos se guardan en `localStorage` del navegador. El rastreo solo encuentra pedidos creados en ese mismo navegador, más el ejemplo incluido. No hay servidor, inventario real ni cuenta de usuario.
+- **Mis pedidos** muestra el historial local de demostración; no representa un inicio de sesión.
 - No se cobran pagos ni se solicitan datos de tarjeta. “Transferencia” y “contra entrega” son elecciones de ejemplo, sin procesamiento.
 - En `dist/app.js`, configura `WHATSAPP_NUMBER` con el número de DG en formato internacional (solo dígitos) para abrir un chat directo. Mientras esté vacío, el botón abre WhatsApp con el mensaje preparado y deja elegir destinatario.
 - Para una tienda real harían falta backend, inventario, pagos certificados, gestión de pedidos y protección de datos.
