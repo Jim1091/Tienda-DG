@@ -24,8 +24,8 @@ async function handle(request:Request,ctx:Ctx) {
   if (root==="session" && request.method==="GET") return json({admin:isAdmin(request)});
   if (root==="catalog" && request.method==="GET") return json(await catalog());
   if (root==="settings" && request.method==="GET") { const {transferInstructions,...publicSettings}=await readSettings(); return json(publicSettings); }
-  if (root==="media" && request.method==="GET" && path.length===3 && action==="products" && /^[a-f0-9-]{36}\.(jpg|png|webp)$/.test(id)) {
-    const object=await bucket().get(`products/${id}`);
+  if (root==="media" && request.method==="GET" && path.length===3 && (action==="products" || action==="categories") && /^[a-f0-9-]{36}\.(jpg|png|webp)$/.test(id)) {
+    const object=await bucket().get(`${action}/${id}`);
     if (!object) return fail("Imagen no encontrada",404);
     return new Response(object.body,{headers:{"Content-Type":object.httpMetadata?.contentType||"image/jpeg","Cache-Control":"public,max-age=86400","X-Content-Type-Options":"nosniff"}});
   }
@@ -73,12 +73,12 @@ async function handle(request:Request,ctx:Ctx) {
   if (action==="categories" && request.method==="POST") {
     const value=categoryInput.parse(await request.json());
     const category={id:crypto.randomUUID(),...value,slug:`${slugify(value.name)}-${crypto.randomUUID().slice(0,6)}`};
-    await db().prepare("INSERT INTO categories(id,name,slug,position,active) VALUES(?,?,?,?,?)").bind(category.id,category.name,category.slug,category.position,category.active?1:0).run();
+    await db().prepare("INSERT INTO categories(id,name,slug,position,active,image_key) VALUES(?,?,?,?,?,?)").bind(category.id,category.name,category.slug,category.position,category.active?1:0,category.imageKey).run();
     return json(category,201);
   }
   if (action==="categories" && id && request.method==="PUT") {
     const value=categoryInput.parse(await request.json());
-    const result=await db().prepare("UPDATE categories SET name=?,position=?,active=? WHERE id=?").bind(value.name,value.position,value.active?1:0,id).run();
+    const result=await db().prepare("UPDATE categories SET name=?,position=?,active=?,image_key=? WHERE id=?").bind(value.name,value.position,value.active?1:0,value.imageKey,id).run();
     return result.meta.changes?json({ok:true}):fail("Categoría no encontrada",404);
   }
   if (action==="products" && request.method==="POST") {
@@ -115,7 +115,8 @@ async function handle(request:Request,ctx:Ctx) {
     const bytes=new Uint8Array(buffer);
     const valid=ext==="jpg"?bytes[0]===255&&bytes[1]===216:ext==="png"?bytes[0]===137&&bytes[1]===80&&bytes[2]===78&&bytes[3]===71:bytes.slice(0,4).every((b,i)=>b===[82,73,70,70][i])&&bytes.slice(8,12).every((b,i)=>b===[87,69,66,80][i]);
     if (!valid) return fail("Archivo de imagen inválido",415);
-    const key=`products/${crypto.randomUUID()}.${ext}`;
+    const folder=new URL(request.url).searchParams.get("kind")==="category"?"categories":"products";
+    const key=`${folder}/${crypto.randomUUID()}.${ext}`;
     await bucket().put(key,buffer,{httpMetadata:{contentType:type}});
     return json({key,url:`/api/media/${key}`},201);
   }

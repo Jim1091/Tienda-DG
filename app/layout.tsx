@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import "./dg.css";
+import "./demo.css";
 
 export const metadata: Metadata = {
   title: "DG | Moda para cada momento",

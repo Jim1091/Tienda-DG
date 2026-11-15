@@ -4,6 +4,7 @@ export const categories = sqliteTable("categories", {
   id: text("id").primaryKey(), name: text("name").notNull(),
   slug: text("slug").notNull().unique(), position: integer("position").notNull().default(0),
   active: integer("active", { mode: "boolean" }).notNull().default(true),
+  imageKey: text("image_key"),
 });
 export const products = sqliteTable("products", {
   id: text("id").primaryKey(), name: text("name").notNull(), slug: text("slug").notNull().unique(),

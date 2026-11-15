@@ -10,7 +10,7 @@ export async function readSettings(): Promise<StoreSettings> {
 }
 export async function catalog() {
   const [categories, products] = await Promise.all([
-    db().prepare("SELECT id,name,slug,position FROM categories WHERE active=1 ORDER BY position,name").all(),
+    db().prepare("SELECT id,name,slug,position,image_key as imageKey FROM categories WHERE active=1 ORDER BY position,name").all(),
     db().prepare("SELECT p.id,p.name,p.slug,p.description,p.category_id as categoryId,p.price_cents as priceCents,p.compare_at_cents as compareAtCents,p.stock,p.sizes,p.image_key as imageKey,p.featured FROM products p LEFT JOIN categories c ON c.id=p.category_id WHERE p.status='active' AND (p.category_id IS NULL OR c.active=1) ORDER BY p.featured DESC,p.created_at DESC").all(),
   ]);
   return { categories: categories.results, products: products.results.map(p => ({...p,sizes: JSON.parse(String(p.sizes)),imageUrl:p.imageKey?`/api/media/${p.imageKey}`:null})) };

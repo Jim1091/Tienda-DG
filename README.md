@@ -2,6 +2,8 @@
 
 Tienda de ropa adaptable a móvil, con catálogo administrable, pedidos por WhatsApp o transferencia y rastreo por código y correo. El catálogo se entrega vacío para que la administradora cargue los productos reales.
 
+Mientras el catálogo está vacío, la portada muestra fotografías ilustrativas en categorías y tarjetas de colección. Llevan etiquetas de ejemplo, no tienen precio ni botón de compra y no se guardan como productos. Desaparecen automáticamente de la colección cuando se publican productos reales. El panel permite subir una foto propia por categoría.
+
 ## Arquitectura
 
 - **Interfaz:** React, Vinext y una PWA instalable en el teléfono.
@@ -21,6 +23,7 @@ npm ci
 npm run db:generate # solo cuando cambie db/schema.ts
 npm run build
 node --import ./scripts/sites-env.mjs ./node_modules/wrangler/bin/wrangler.js d1 execute DB --local --config dist/server/wrangler.json --persist-to .wrangler/state --file drizzle/0000_sweet_leo.sql
+node --import ./scripts/sites-env.mjs ./node_modules/wrangler/bin/wrangler.js d1 execute DB --local --config dist/server/wrangler.json --persist-to .wrangler/state --file drizzle/0001_clever_titanium_man.sql
 node --import ./scripts/sites-env.mjs ./node_modules/wrangler/bin/wrangler.js dev --config dist/server/wrangler.json --local --persist-to .wrangler/state --ip 127.0.0.1 --var DG_ADMIN_EMAIL:seedy@sites.test
 ```
 

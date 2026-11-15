@@ -4,6 +4,7 @@ export const categoryInput = z.object({
   name: z.string().trim().min(2).max(60),
   position: z.number().int().min(0).max(999).default(0),
   active: z.boolean().default(true),
+  imageKey: z.string().regex(/^categories\/[a-f0-9-]{36}\.(jpg|png|webp)$/).nullable().default(null),
 });
 export const productInput = z.object({
   name: z.string().trim().min(2).max(120), description: z.string().trim().max(3000).default(""),
