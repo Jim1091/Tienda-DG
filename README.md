@@ -4,6 +4,8 @@ Tienda de ropa adaptable a móvil, con catálogo administrable, pedidos por What
 
 Mientras el catálogo está vacío, la portada muestra fotografías ilustrativas en categorías y tarjetas de colección. Llevan etiquetas de ejemplo, no tienen precio ni botón de compra y no se guardan como productos. Desaparecen automáticamente de la colección cuando se publican productos reales. El panel permite subir una foto propia por categoría.
 
+La sección **Ofertas** aparece en la portada. Para publicar una oferta real, crea o edita un producto activo con stock, precio actual y un **precio anterior mayor**. El porcentaje se calcula a partir de esos precios y se muestra junto al producto. Cuando el catálogo está vacío, la sección usa fotografías ilustrativas sin precios ni opción de compra; si hay productos pero ninguno tiene oferta, la sección se oculta.
+
 ## Arquitectura
 
 - **Interfaz:** React, Vinext y una PWA instalable en el teléfono.
