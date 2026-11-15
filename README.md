@@ -1,31 +1,33 @@
-# DG Moda
+# DG Moda Estudio
 
-Adaptación académica de una tienda de ropa. El sitio de referencia es [Venova Moda](https://venovamoda.com/); se analizaron su buscador, menú de categorías, novedades, precios, secciones de descuentos y destacados, selección de talla, carrito, consulta de pedidos y acceso a WhatsApp. DG usa identidad gráfica, textos y datos de ejemplo propios.
+Tienda de ropa adaptable a móvil, con catálogo administrable, pedidos por WhatsApp o transferencia y rastreo por código y correo. El catálogo se entrega vacío para que la administradora cargue los productos reales.
+
+## Arquitectura
+
+- **Interfaz:** React, Vinext y una PWA instalable en el teléfono.
+- **API:** rutas en `app/api/[...path]/route.ts`, con validación en `lib/store-domain.ts` y acceso a D1/R2 en `lib/store-repository.ts`.
+- **Datos:** Cloudflare D1 para categorías, productos, pedidos y configuración; R2 para fotos. La migración versionada está en `drizzle/`.
+- **Acceso:** el panel `/admin` y las rutas `/api/admin/*` requieren la identidad de la propietaria del sitio; `DG_ADMIN_EMAIL` se configura como variable privada del alojamiento. Las escrituras exigen además origen del sitio y cabecera `x-dg-admin`.
+- **Pedidos:** no se cobra en la web. Cada pedido comienza pendiente. El administrador verifica el pago y confirma; la confirmación descuenta stock de forma transaccional mediante triggers de D1. Cancelar antes del envío restituye el stock.
+
+La estructura separa reglas de dominio, almacenamiento y presentación. Para una aplicación nativa futura se puede envolver la PWA o reutilizar la API sin duplicar el catálogo.
 
 ## Probar localmente
 
-Desde `DG-tienda`:
+Requiere Node 22 o superior.
 
 ```powershell
-python -m http.server 8000 --directory dist
+npm ci
+npm run db:generate # solo cuando cambie db/schema.ts
+npm run build
+node --import ./scripts/sites-env.mjs ./node_modules/wrangler/bin/wrangler.js d1 execute DB --local --config dist/server/wrangler.json --persist-to .wrangler/state --file drizzle/0000_sweet_leo.sql
+node --import ./scripts/sites-env.mjs ./node_modules/wrangler/bin/wrangler.js dev --config dist/server/wrangler.json --local --persist-to .wrangler/state --ip 127.0.0.1 --var DG_ADMIN_EMAIL:seedy@sites.test
 ```
 
-Abre `http://localhost:8000`.
+La tienda local abre en `http://127.0.0.1:8787`. En otra terminal, `node scripts/smoke-store.mjs` comprueba autorización, catálogo, pedidos, rastreo, stock y fotos. El script crea datos **solo en la base local**. Para volver a compilar, detén el servidor de Wrangler primero.
 
-Para probar el recorrido: abre un producto con `+`, elige una talla, agrégalo al carrito, pulsa **Continuar pedido**, completa el formulario con un correo de prueba y guarda el número generado. Consúltalo en **Rastrear pedido** con el mismo correo. También existe el ejemplo `DG-DEMO-001` / `demo@dg.com`.
+## Publicación y operación
 
-## Alcance de la demostración
+El manifiesto `.openai/hosting.json` conecta D1 y R2 al mismo Site. Sites aplica la migración antes de publicar el Worker. Mantén `DG_ADMIN_EMAIL` como secreto del entorno, no en Git. El sitio se mantiene privado durante la preparación; antes de abrirlo al público, carga productos reales, confirma los datos de transferencia, prueba en móvil y acuerda entregas, devoluciones y tratamiento de datos.
 
-- El catálogo, los precios y las fotos son ilustrativos. Las fotografías son de [Unsplash](https://unsplash.com/) y se guardaron localmente.
-- El carrito y los pedidos se guardan en `localStorage` del navegador. El rastreo solo encuentra pedidos creados en ese mismo navegador, más el ejemplo incluido. No hay servidor, inventario real ni cuenta de usuario.
-- **Mis pedidos** muestra el historial local de demostración; no representa un inicio de sesión.
-- No se cobran pagos ni se solicitan datos de tarjeta. “Transferencia” y “contra entrega” son elecciones de ejemplo, sin procesamiento.
-- En `dist/app.js`, configura `WHATSAPP_NUMBER` con el número de DG en formato internacional (solo dígitos) para abrir un chat directo. Mientras esté vacío, el botón abre WhatsApp con el mensaje preparado y deja elegir destinatario.
-- Para una tienda real harían falta backend, inventario, pagos certificados, gestión de pedidos y protección de datos.
-
-## Archivos
-
-- `dist/index.html`: estructura y contenido.
-- `dist/styles.css`: identidad visual y diseño adaptable a móvil.
-- `dist/app.js`: catálogo, filtros, carrito, compra y rastreo de demostración.
-- `dist/images/`: fotografías locales usadas en la página.
+La tienda permite cargar tallas y stock total por producto. Si DG necesita stock independiente por talla o integración con pasarela de pagos, esas funciones requieren una evolución del modelo y pruebas adicionales.

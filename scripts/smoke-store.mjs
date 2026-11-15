@@ -1,0 +1,46 @@
+import assert from "node:assert/strict";
+
+const base = process.env.DG_SMOKE_URL || "http://127.0.0.1:8787";
+const admin = {"oai-authenticated-user-email":"seedy@sites.test","x-dg-admin":"1",Origin:base,"Content-Type":"application/json"};
+async function call(path, method="GET", body, headers={}) {
+  const response=await fetch(`${base}${path}`,{method,headers:body===undefined?headers:{"Content-Type":"application/json",...headers},body:body===undefined?undefined:JSON.stringify(body)});
+  return {status:response.status,data:await response.json()};
+}
+const unauthorized=await call("/api/admin/dashboard");
+assert.equal(unauthorized.status,403);
+const empty=await call("/api/catalog");
+assert.equal(empty.status,200);
+const suffix=Math.random().toString(36).slice(2,9);
+const category=await call("/api/admin/categories","POST",{name:`Prueba ${suffix}`,position:0,active:true},admin);
+assert.equal(category.status,201,JSON.stringify(category));
+const product=await call("/api/admin/products","POST",{name:`Vestido ${suffix}`,description:"Prueba local",categoryId:category.data.id,priceCents:2500,compareAtCents:null,stock:2,sizes:["M"],imageKey:null,featured:false,status:"active"},admin);
+assert.equal(product.status,201,JSON.stringify(product));
+const visible=await call("/api/catalog");
+assert.ok(visible.data.products.some(p=>p.id===product.data.id));
+const order=await call("/api/orders","POST",{customerName:"Cliente Prueba",customerEmail:"test@example.com",customerPhone:"0967794192",deliveryDetails:"Retiro en tienda a coordinar",paymentMethod:"whatsapp",items:[{productId:product.data.id,size:"M",quantity:1}]});
+assert.equal(order.status,201,JSON.stringify(order));
+assert.equal(order.data.totalCents,2500);
+const track=await call("/api/orders/track","POST",{code:order.data.code,email:"test@example.com"});
+assert.equal(track.data.status,"pending");
+const dashboard=await call("/api/admin/dashboard","GET",undefined,admin);
+const row=dashboard.data.orders.find(o=>o.code===order.data.code);
+assert.ok(row);
+const confirm=await call(`/api/admin/orders/${row.id}`,"PUT",{status:"confirmed"},admin);
+assert.equal(confirm.status,200,JSON.stringify(confirm));
+const afterConfirm=await call("/api/admin/dashboard","GET",undefined,admin);
+assert.equal(afterConfirm.data.products.find(p=>p.id===product.data.id).stock,1);
+const cancel=await call(`/api/admin/orders/${row.id}`,"PUT",{status:"cancelled"},admin);
+assert.equal(cancel.status,200,JSON.stringify(cancel));
+const afterCancel=await call("/api/admin/dashboard","GET",undefined,admin);
+assert.equal(afterCancel.data.products.find(p=>p.id===product.data.id).stock,2);
+const archive=await call(`/api/admin/products/${product.data.id}`,"DELETE",undefined,admin);
+assert.equal(archive.status,200);
+const png=Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQIHWP4z8DwHwAFgAI/ScL/nwAAAABJRU5ErkJggg==","base64");
+const upload=await fetch(`${base}/api/admin/media`,{method:"POST",headers:{...admin,"Content-Type":"image/png"},body:png});
+const media=await upload.json();
+assert.equal(upload.status,201,JSON.stringify(media));
+assert.ok(media?.url);
+const image=await fetch(`${base}${media.url}`);
+assert.equal(image.status,200);
+assert.equal(image.headers.get("content-type"),"image/png");
+console.log("DG smoke test passed: auth, catalog, order, tracking, stock, archive and image storage.");
