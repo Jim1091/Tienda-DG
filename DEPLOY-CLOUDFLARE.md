@@ -18,10 +18,11 @@ Esta tienda usa Vinext, rutas de servidor, D1 y R2. El destino es **Cloudflare W
    ```powershell
    cd 'C:\Users\jl-eu\OneDrive\Documentos\ProyectoÑiñita\DG-tienda'
    git config --global --add safe.directory 'C:/Users/jl-eu/OneDrive/Documentos/ProyectoÑiñita/DG-tienda'
+   git credential-manager github login --username Jim1091 --web
    git push -u origin main
    ```
 
-   Si GitHub pide autenticación, usa tu inicio de sesión de GitHub. No pegues un token en el repositorio ni en el chat.
+   La terminal tenía guardada otra cuenta (`jleod7`); `origin` ya especifica `Jim1091` para este repositorio. Completa en el navegador el inicio de sesión como **Jim1091**. No pegues un token en el repositorio ni en el chat.
 
 2. **Cloudflare:** entra en **Workers & Pages → Create application → GitHub**, autoriza ese repositorio y selecciona la rama de producción `main`. Pon al Worker el nombre exacto `dg-tienda`. La raíz del proyecto es `/` porque `DG-tienda` es el repositorio Git. Configura:
 
