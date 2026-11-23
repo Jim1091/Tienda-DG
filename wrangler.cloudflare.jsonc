@@ -1,0 +1,21 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "dg-tienda",
+  "main": "./worker/index.ts",
+  "compatibility_date": "2026-05-15",
+  "compatibility_flags": ["nodejs_compat"],
+  "keep_vars": true,
+  "vars": {
+    "DG_AUTH_PROVIDER": "cloudflare_access"
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "dg-tienda-db",
+      "migrations_dir": "drizzle"
+    }
+  ],
+  "r2_buckets": [
+    { "binding": "BUCKET" }
+  ]
+}

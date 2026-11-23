@@ -1,0 +1,18 @@
+.store-menu{display:flex;flex-direction:column;min-height:calc(100% - 85px)}
+.store-menu-intro{padding:27px 5px 20px}
+.store-menu-intro .eyebrow{color:#8e514b;font-size:10px}
+.store-menu-intro p{font-size:26px;line-height:1.2;margin:12px 0 0;max-width:310px}
+.store-menu-links{display:grid;gap:5px;padding-top:12px}
+.store-menu-links a,.store-menu-links button{border:0;background:transparent;display:flex;align-items:center;gap:14px;width:100%;padding:15px 13px;text-align:left;font-size:14px;font-weight:600;color:#29231e;border-radius:3px}
+.store-menu-links a:hover,.store-menu-links button:hover{background:#eeeae4;color:#81513e}
+.store-menu-links svg{color:#8e514b;flex:none}
+.store-menu-label{padding:4px 13px;color:#8e514b;font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase}
+.store-menu-links .store-menu-external{margin-left:auto;color:#9a8e85}
+.store-menu-divider{height:1px;background:#e5e0d9;margin:20px 0 5px}
+.store-menu-bottom{display:flex;align-items:center;gap:8px;color:#81766f;font-size:11px;margin-top:auto;padding:28px 12px 12px}
+.store-menu-bottom svg{color:#8e514b}
+.admin-shortcut{display:inline-flex;align-items:center;gap:5px;color:#8e514b;font-size:11px;font-weight:700;letter-spacing:.03em;text-transform:none;padding:8px}
+.admin-shortcut:hover{color:#29231e}
+@media(max-width:1050px){.admin-shortcut span{display:none}}
+@media(max-width:520px){.header-inner{grid-template-columns:minmax(0,1fr) auto}.header-inner .brand{font-size:27px;letter-spacing:.08em;text-align:left}.header-inner .brand small{font-size:6px;letter-spacing:.22em}.header-actions{gap:0}.header-actions .iconbtn,.admin-shortcut{padding:5px}}
+@media(max-width:520px){.header-actions>.iconbtn[aria-label="Rastrear pedido"],.header-actions>.admin-shortcut{display:none}}

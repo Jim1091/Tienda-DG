@@ -1,0 +1,15 @@
+.live-schedule,.hero-announcement{box-sizing:border-box;min-height:58px;margin:0;padding:10px 20px;color:#33282c;background:linear-gradient(110deg,#f7f0e9 0%,#eaded5 58%,#f4ece6 100%);border-top:1px solid #fff9f0}
+.hero .live-schedule,.hero .hero-announcement{width:max-content;max-width:100%;margin-top:24px;background:linear-gradient(110deg,#f7f0e9e8 0%,#eaded5df 58%,#f4ece6e8 100%);backdrop-filter:blur(8px);text-shadow:none}
+.live-schedule-inner{display:flex;align-items:center;justify-content:space-between;gap:14px;min-height:36px}
+.live-schedule-brand{display:inline-flex;align-items:center;flex:none;color:#33282c;text-decoration:none}
+.live-schedule-label{display:inline-flex;align-items:center;gap:9px;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
+.live-schedule-label .live-tiktok-logo{flex:none;filter:drop-shadow(0 2px 5px #33282c33);animation:live-tiktok-breathe 5s ease-in-out infinite}
+a.live-schedule-brand:hover .live-schedule-label{text-decoration:underline;text-underline-offset:4px}
+a.live-schedule-brand:focus-visible{outline:2px solid #713f50;outline-offset:4px}
+.live-schedule p{display:flex;align-items:center;gap:7px;margin:0;color:#57464b;font-size:11px;line-height:1.4;text-align:right}
+.live-schedule p strong{color:#33282c}
+.hero .hero-announcement{display:flex;align-items:center;max-width:none;line-height:1.4;font-size:12px;letter-spacing:.03em}
+@keyframes live-tiktok-breathe{0%,82%,100%{transform:scale(1)}91%{transform:scale(1.12) rotate(-5deg)}96%{transform:scale(1.03) rotate(2deg)}}
+@media(max-width:700px){.live-schedule-inner{flex-wrap:wrap;justify-content:center;gap:3px 12px}.live-schedule p{justify-content:center;flex-wrap:wrap;gap:2px 6px;text-align:center}}
+@media(max-width:430px){.live-schedule-brand,.live-schedule p{width:100%;justify-content:center}}
+@media(prefers-reduced-motion:reduce){.live-schedule-label .live-tiktok-logo{animation:none}}

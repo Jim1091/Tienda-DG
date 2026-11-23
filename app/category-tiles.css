@@ -1,0 +1,8 @@
+﻿.category-photo-tile{position:relative;aspect-ratio:1/1;overflow:hidden;border:0;padding:0;text-align:left;background:#a88978;color:white;display:block;width:100%}
+.category-photo{position:absolute;inset:0;background-size:cover;background-position:center;transition:transform .35s}
+.category-photo-tile:hover .category-photo{transform:scale(1.05)}
+.category-shade{position:absolute;inset:0;background:linear-gradient(180deg,transparent 30%,#17120fbd)}
+.category-content{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;align-items:flex-start;padding:24px;gap:8px}
+.category-content strong{font:400 clamp(23px,2.3vw,33px) 'Playfair Display',Georgia,serif}
+.category-link{display:inline-flex;align-items:center;gap:8px;text-transform:uppercase;font-size:10px;letter-spacing:.12em}
+@media(max-width:520px){.category-content{padding:14px}.category-content .eyebrow{font-size:8px}.category-content strong{font-size:22px}.category-link{font-size:8px}}

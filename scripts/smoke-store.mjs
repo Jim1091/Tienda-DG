@@ -54,4 +54,6 @@ const withImage=await call("/api/catalog");
 assert.equal(withImage.data.categories.find(c=>c.id===category.data.id).imageKey,categoryMedia.key);
 const categoryImage=await fetch(`${base}${categoryMedia.url}`);
 assert.equal(categoryImage.status,200);
+const hiddenCategory=await call(`/api/admin/categories/${category.data.id}`,"PUT",{name:category.data.name,position:0,active:false,imageKey:categoryMedia.key},admin);
+assert.equal(hiddenCategory.status,200);
 console.log("DG smoke test passed: auth, catalog, order, tracking, stock, archive and product/category images.");

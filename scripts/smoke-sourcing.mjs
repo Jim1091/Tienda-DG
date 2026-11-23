@@ -8,7 +8,15 @@ const payload={customerName:"Cliente Prueba",customerEmail:email,customerPhone:"
 function form(image=png,type="image/png") {const data=new FormData();for(const [key,value] of Object.entries(payload))data.set(key,value);data.set("image",new File([image],"referencia.png",{type}));return data;}
 async function json(path,method="GET",body,headers={}){const response=await fetch(base+path,{method,headers:body===undefined?headers:{"Content-Type":"application/json",...headers},body:body===undefined?undefined:JSON.stringify(body)});return {status:response.status,data:await response.json()};}
 
+const dashboard=await json("/api/admin/dashboard","GET",undefined,admin);
+assert.equal(dashboard.status,200);
+const originalSettings=dashboard.data.settings;
+try {
 assert.equal((await json("/api/admin/dashboard")).status,403);
+assert.equal((await json("/api/admin/settings","PUT",{...originalSettings,showSourcing:false},admin)).status,200);
+assert.equal((await fetch(base+"/api/sourcing",{method:"POST",body:form()})).status,404);
+assert.equal((await json("/api/settings")).data.showSourcing,false);
+assert.equal((await json("/api/admin/settings","PUT",{...originalSettings,showSourcing:true},admin)).status,200);
 const invalid=await fetch(base+"/api/sourcing",{method:"POST",body:form(Buffer.from("This is not a PNG image at all."))});
 assert.equal(invalid.status,415);
 const createResponse=await fetch(base+"/api/sourcing",{method:"POST",body:form()});
@@ -27,3 +35,6 @@ const impossible=await json(`/api/admin/sourcing/${row.id}`,"PUT",{status:"fulfi
 const deleted=await json(`/api/admin/sourcing/${row.id}`,"DELETE",undefined,admin);assert.equal(deleted.status,200);
 assert.equal((await json("/api/sourcing/track","POST",{code:created.code,email})).status,404);
 console.log("Sourcing smoke passed: upload, private image, quote, tracking, transitions and deletion.");
+} finally {
+  await json("/api/admin/settings","PUT",originalSettings,admin);
+}
