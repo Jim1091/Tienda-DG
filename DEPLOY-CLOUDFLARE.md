@@ -8,7 +8,7 @@ Esta tienda usa Vinext, rutas de servidor, D1 y R2. El destino es **Cloudflare W
 - `npm run deploy:cloudflare` publica el resultado compilado. Úsalo como *Deploy command* en Workers Builds.
 - Los bindings `DB` y `BUCKET` están declarados para que Wrangler los aprovisione en el primer despliegue. La base creada se llama `dg-tienda-db`; consulta el nombre real del bucket R2 en el panel de Cloudflare.
 - `npm run db:migrate:cloudflare` aplica, con seguimiento de versiones, los SQL de `drizzle/` a la base remota. Ejecútalo **una vez después del primer despliegue** y de nuevo cuando se añadan migraciones. No apliques el esquema inicial a una base existente sin revisar sus tablas y respaldarla.
-- El acceso al panel exige un JWT válido de Cloudflare Access, el `AUD` de la aplicación y el correo configurado en `DG_ADMIN_EMAIL`. El Worker descarta los encabezados de identidad que pueda enviar el visitante.
+- El acceso al panel exige un JWT válido de Cloudflare Access, el `AUD` de la aplicación y un correo configurado en `DG_ADMIN_EMAIL` o `DG_ADMIN_EMAILS`. El Worker descarta los encabezados de identidad que pueda enviar el visitante.
 - `.node-version` fija Node 22 para la compilación. `.dev.vars` y los artefactos compilados están fuera de Git.
 
 ## Pasos en tus cuentas
@@ -50,6 +50,7 @@ Esta tienda usa Vinext, rutas de servidor, D1 y R2. El destino es **Cloudflare W
    | Nombre | Valor |
    | --- | --- |
    | `DG_ADMIN_EMAIL` | Correo autorizado para el panel. Guárdalo como secreto. |
+   | `DG_ADMIN_EMAILS` | Correos adicionales autorizados, separados por comas. Guárdalos como secreto y añádelos también a la política Allow de la misma aplicación Access. |
    | `DG_ACCESS_TEAM_DOMAIN` | `https://TU-EQUIPO.cloudflareaccess.com` |
    | `DG_ACCESS_AUD` | AUD Tag de la aplicación Access. |
 

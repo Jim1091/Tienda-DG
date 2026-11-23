@@ -5,6 +5,7 @@ import { categoryInput, guestHistoryInput, normalizePhone, orderInput, productIn
 import { createSourcingRequest, deleteSourcingRequest, getSourcingImage, listSourcingRequests, SourcingError, trackSourcingRequest, updateSourcingRequest } from "../../../backend/application/concierge-service";
 import { ImageUploadError, inspectImage } from "../../../backend/infrastructure/image-upload";
 import { findOrderForPhone, getGuestOrderHistory, OrderHistoryError } from "../../../backend/application/order-history";
+import { isAdminEmail } from "../../../lib/admin-access";
 
 export const dynamic = "force-dynamic";
 type Ctx = { params: Promise<{path:string[]}> };
@@ -13,7 +14,7 @@ const fail = (message:string,status=400) => json({error:message},status);
 const now = () => new Date().toISOString();
 const isAdmin = (request:Request) => {
   const email = request.headers.get("oai-authenticated-user-email");
-  return !!email && !!env.DG_ADMIN_EMAIL && email.toLowerCase() === env.DG_ADMIN_EMAIL.toLowerCase();
+  return isAdminEmail(email, env);
 };
 const requireWrite = (request:Request) => {
   if (!isAdmin(request)) return fail("Acceso restringido",403);

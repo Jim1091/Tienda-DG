@@ -1,6 +1,7 @@
 import handler from "vinext/server/fetch-handler";
 import { runWithConnectorBinding } from "../lib/connector-context";
 import { verifiedAccessEmail } from "../lib/cloudflare-access";
+import { isAdminEmail } from "../lib/admin-access";
 import type { ConnectorBinding } from "../lib/connector-contract.mjs";
 
 const worker = {
@@ -27,8 +28,7 @@ const worker = {
           env.DG_ACCESS_TEAM_DOMAIN,
           env.DG_ACCESS_AUD,
         );
-        const admin = !!email && !!env.DG_ADMIN_EMAIL &&
-          email === env.DG_ADMIN_EMAIL.toLowerCase();
+        const admin = isAdminEmail(email, env);
         if (adminPath && !admin) {
           return new Response("Acceso restringido", { status: 403 });
         }
