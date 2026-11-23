@@ -13,11 +13,11 @@ Esta tienda usa Vinext, rutas de servidor, D1 y R2. El destino es **Cloudflare W
 
 ## Pasos en tus cuentas
 
-1. **GitHub:** crea un repositorio **privado y vacío** llamado `dg-tienda` en la cuenta donde quieras mantener el código. No selecciones README ni `.gitignore` al crearlo. En la carpeta `DG-tienda`, revisa `git status --short` y el commit local preparado; agrega la URL remota y envía `main`:
+1. **GitHub:** crea un repositorio **privado y vacío** llamado `dg-tienda` en la cuenta donde quieras mantener el código. No selecciones README ni `.gitignore` al crearlo. En este checkout ya está configurado `origin` con `https://github.com/Jim1091/dg-tienda.git`; envía `main`:
 
    ```powershell
    cd 'C:\Users\jl-eu\OneDrive\Documentos\ProyectoÑiñita\DG-tienda'
-   git remote add origin https://github.com/TU_USUARIO/dg-tienda.git
+   git config --global --add safe.directory 'C:/Users/jl-eu/OneDrive/Documentos/ProyectoÑiñita/DG-tienda'
    git push -u origin main
    ```
 
