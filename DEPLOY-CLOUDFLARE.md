@@ -13,7 +13,7 @@ Esta tienda usa Vinext, rutas de servidor, D1 y R2. El destino es **Cloudflare W
 
 ## Pasos en tus cuentas
 
-1. **GitHub:** crea un repositorio **privado y vacío** llamado `dg-tienda` en la cuenta donde quieras mantener el código. No selecciones README ni `.gitignore` al crearlo. En este checkout ya está configurado `origin` con `https://github.com/Jim1091/dg-tienda.git`; envía `main`:
+1. **GitHub:** el repositorio vacío ya está creado en `https://github.com/Jim1091/Tienda-DG`. En este checkout `origin` apunta a ese repositorio; envía `main`:
 
    ```powershell
    cd 'C:\Users\jl-eu\OneDrive\Documentos\ProyectoÑiñita\DG-tienda'
