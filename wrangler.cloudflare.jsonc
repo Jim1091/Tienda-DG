@@ -12,10 +12,11 @@
     {
       "binding": "DB",
       "database_name": "dg-tienda-db",
+      "database_id": "b9ab939c-967f-46be-ad06-493055a1b364",
       "migrations_dir": "drizzle"
     }
   ],
   "r2_buckets": [
-    { "binding": "BUCKET" }
+    { "binding": "BUCKET", "bucket_name": "dg-tienda-bucket" }
   ]
 }
